@@ -51,8 +51,15 @@ NEXT_PUBLIC_WS_URL=ws://localhost:8080/ws
 - Call-to-action sections
 - Fully responsive design
 
+### ✅ Authentication
+- Login page with form validation
+- Register page with password strength indicator
+- JWT token management
+- Protected routes middleware
+- Social login buttons (Google, GitHub)
+- Error handling and loading states
+
 ### 🎯 Planned Features
-- [ ] Authentication (Login/Register)
 - [ ] Social Feed with infinite scroll
 - [ ] Real-time messaging
 - [ ] Ride-sharing interface with maps
@@ -101,15 +108,19 @@ frontend/
 │   ├── app/            # Next.js app router pages
 │   │   ├── layout.tsx  # Root layout with providers
 │   │   ├── page.tsx    # Landing page
+│   │   ├── login/      # Login page
+│   │   ├── register/   # Register page
 │   │   └── globals.css # Global styles
 │   ├── components/     # Reusable UI components
 │   │   └── Navbar.tsx  # Navigation component
 │   ├── services/       # API service layer
 │   │   └── api.ts      # Axios client & API calls
 │   ├── hooks/          # Custom React hooks
+│   │   └── useAuth.ts  # Authentication hook
 │   ├── utils/          # Helper functions
 │   ├── assets/         # Images, fonts, etc.
-│   └── styles/         # Additional styles
+│   ├── styles/         # Additional styles
+│   └── middleware.ts   # Route protection
 ├── package.json
 ├── tsconfig.json
 ├── tailwind.config.ts
@@ -174,17 +185,25 @@ const handlePost = async () => {
 ### State Management
 
 ```typescript
-import create from 'zustand';
+import { useAuth } from '@/hooks/useAuth';
 
-interface UserStore {
-  user: User | null;
-  setUser: (user: User) => void;
+export default function Component() {
+  const { user, isAuthenticated, logout } = useAuth();
+
+  return (
+    <div>
+      {isAuthenticated ? (
+        <div>
+          <p>Welcome, {user?.username}!</p>
+          <p>Tokens: {user?.token_balance}</p>
+          <button onClick={logout}>Logout</button>
+        </div>
+      ) : (
+        <p>Please login</p>
+      )}
+    </div>
+  );
 }
-
-export const useUserStore = create<UserStore>((set) => ({
-  user: null,
-  setUser: (user) => set({ user }),
-}));
 ```
 
 ## 🎭 Animations
@@ -217,6 +236,36 @@ Mobile-first approach with Tailwind breakpoints:
   {/* Responsive grid */}
 </div>
 ```
+
+## 🔐 Authentication Flow
+
+### Login Process
+1. User enters email and password
+2. Form validates input
+3. API call to `/api/v1/auth/login`
+4. JWT token stored in localStorage and cookies
+5. User redirected to social feed
+6. Protected routes now accessible
+
+### Registration Process
+1. User enters email, username, password
+2. Password strength indicator shows security level
+3. Form validates all fields
+4. API call to `/api/v1/auth/register`
+5. JWT token stored automatically
+6. User redirected to social feed
+7. Welcome bonus tokens awarded
+
+### Protected Routes
+Routes requiring authentication:
+- `/social` - Social feed
+- `/messages` - Messaging
+- `/rides` - Ride sharing
+- `/wallet` - Token wallet
+- `/dao` - DAO governance
+- `/apps` - Mini apps
+
+Middleware automatically redirects unauthenticated users to login page.
 
 ## 🚀 Deployment
 
