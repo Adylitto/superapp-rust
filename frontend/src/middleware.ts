@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 // Protected routes that require authentication
-const protectedRoutes = ['/social', '/messages', '/rides', '/wallet', '/dao', '/apps'];
+const protectedRoutes = ['/social', '/messages', '/rides', '/wallet', '/dao', '/apps', '/profile'];
 
 // Public routes that should redirect to home if authenticated
 const authRoutes = ['/login', '/register'];
@@ -28,7 +28,7 @@ export function middleware(request: NextRequest) {
 
   // Redirect to home if accessing auth routes with token
   if (isAuthRoute && token) {
-    return NextResponse.redirect(new URL('/social', request.url));
+    return NextResponse.redirect(new URL('/', request.url));
   }
 
   return NextResponse.next();

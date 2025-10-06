@@ -4,9 +4,8 @@
   "buildCommand": "cd frontend && npm install && npm run build",
   "devCommand": "cd frontend && npm run dev",
   "installCommand": "cd frontend && npm install",
-  "framework": null,
+  "framework": "nextjs",
   "outputDirectory": "frontend/.next",
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD ./frontend",
   "github": {
     "silent": true
   },

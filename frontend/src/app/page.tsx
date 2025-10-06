@@ -2,46 +2,39 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { FiUser, FiMessageCircle, FiTruck, FiDollarSign, FiBox, FiZap } from 'react-icons/fi';
 
 const features = [
   {
-    icon: FiUser,
     title: 'Social Network',
     description: 'Connect with friends, share posts, and discover new connections',
     color: 'from-blue-500 to-cyan-500',
     href: '/social',
   },
   {
-    icon: FiMessageCircle,
     title: 'Real-Time Chat',
     description: 'End-to-end encrypted messaging with real-time updates',
     color: 'from-green-500 to-emerald-500',
     href: '/messages',
   },
   {
-    icon: FiTruck,
     title: 'Ride Sharing',
     description: 'Request rides with AI-optimized routing and driver matching',
     color: 'from-purple-500 to-pink-500',
     href: '/rides',
   },
   {
-    icon: FiDollarSign,
     title: 'Payments',
     description: 'Seamless fiat and crypto payments with built-in wallet',
     color: 'from-yellow-500 to-orange-500',
     href: '/wallet',
   },
   {
-    icon: FiBox,
     title: 'DAO Governance',
     description: 'Participate in decentralized decision-making with token voting',
     color: 'from-indigo-500 to-purple-500',
     href: '/dao',
   },
   {
-    icon: FiZap,
     title: 'Mini Apps',
     description: 'Access third-party services and earn tokens for engagement',
     color: 'from-red-500 to-pink-500',
@@ -51,9 +44,9 @@ const features = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 text-white">
       {/* Hero Section */}
-      <section className="gradient-bg text-white py-20 px-4">
+      <section className="py-20 px-4">
         <div className="container mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -61,7 +54,7 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             className="text-center"
           >
-            <h1 className="text-5xl md:text-7xl font-bold mb-6">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">
               Welcome to SuperApp
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-white/90">
@@ -72,7 +65,7 @@ export default function Home() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="bg-white text-primary-600 px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all"
+                  className="bg-white text-blue-600 px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all"
                 >
                   Get Started
                 </motion.button>
@@ -92,7 +85,7 @@ export default function Home() {
       </section>
 
       {/* Features Grid */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4 bg-white text-gray-800">
         <div className="container mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0 }}
@@ -100,10 +93,10 @@ export default function Home() {
             transition={{ delay: 0.3 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
               Everything You Need
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-lg text-gray-600">
               Powered by Rust, secured by blockchain, enhanced by AI
             </p>
           </motion.div>
@@ -119,14 +112,14 @@ export default function Home() {
                 className="group"
               >
                 <Link href={feature.href}>
-                  <div className="card h-full cursor-pointer">
-                    <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                      <feature.icon className="text-2xl text-white" />
+                  <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6 hover:shadow-lg transition-shadow h-full cursor-pointer">
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 mx-auto group-hover:scale-110 transition-transform`}>
+                      <span className="text-white text-xl font-bold">{index + 1}</span>
                     </div>
-                    <h3 className="text-2xl font-bold mb-2 group-hover:text-primary-600 transition-colors">
+                    <h3 className="text-xl font-bold mb-2 text-center group-hover:text-blue-600 transition-colors">
                       {feature.title}
                     </h3>
-                    <p className="text-gray-600">
+                    <p className="text-gray-600 text-center">
                       {feature.description}
                     </p>
                   </div>
@@ -153,7 +146,7 @@ export default function Home() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.1 * index }}
               >
-                <div className="text-4xl md:text-5xl font-bold text-primary-600 mb-2">
+                <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">
                   {stat.value}
                 </div>
                 <div className="text-gray-600 font-medium">
@@ -171,9 +164,9 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="gradient-bg text-white rounded-3xl p-12 text-center shadow-2xl"
+            className="bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-3xl p-12 text-center shadow-2xl"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
               Ready to Join?
             </h2>
             <p className="text-xl mb-8 text-white/90">
@@ -183,7 +176,7 @@ export default function Home() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-white text-primary-600 px-10 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all"
+                className="bg-white text-blue-600 px-10 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all"
               >
                 Create Free Account
               </motion.button>
