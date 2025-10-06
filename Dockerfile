@@ -1,5 +1,5 @@
 # Multi-stage build for minimal image size
-FROM rust:1.75-slim as builder
+FROM rust:latest as builder
 
 WORKDIR /app
 
