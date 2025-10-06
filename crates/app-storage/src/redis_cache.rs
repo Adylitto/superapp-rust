@@ -21,7 +21,7 @@ impl RedisCache {
     /// Set value with expiration
     pub async fn set(&mut self, key: &str, value: &str, ttl_seconds: u64) -> Result<()> {
         self.client
-            .set_ex(key, value, ttl_seconds)
+            .set_ex::<_, _, ()>(key, value, ttl_seconds)
             .await
             .map_err(|e| crate::StorageError::CacheError(e.to_string()))?;
         Ok(())
@@ -40,7 +40,7 @@ impl RedisCache {
     /// Delete value
     pub async fn delete(&mut self, key: &str) -> Result<()> {
         self.client
-            .del(key)
+            .del::<_, ()>(key)
             .await
             .map_err(|e| crate::StorageError::CacheError(e.to_string()))?;
         Ok(())

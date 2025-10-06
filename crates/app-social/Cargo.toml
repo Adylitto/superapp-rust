@@ -5,6 +5,7 @@ edition.workspace = true
 
 [dependencies]
 app-core = { path = "../app-core" }
+app-storage = { path = "../app-storage" }
 
 tokio = { workspace = true }
 serde = { workspace = true }

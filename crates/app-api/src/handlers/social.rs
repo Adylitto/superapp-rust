@@ -1,4 +1,4 @@
-use axum::{http::StatusCode, response::IntoResponse, Json};
+use axum::{http::StatusCode, response::IntoResponse, extract::State, Json};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize)]
@@ -16,10 +16,11 @@ pub struct CreatePostResponse {
 
 /// Create social post endpoint
 pub async fn create_post(
+    // State(social_service): State<SocialService>,  // We'll implement this later
     Json(payload): Json<CreatePostRequest>,
 ) -> impl IntoResponse {
-    // TODO: Implement actual post creation with AI moderation
-
+    // TODO: Implement actual post creation with service
+    // For now, return a placeholder response
     tracing::info!("Creating post: {}", payload.content);
 
     let response = CreatePostResponse {
@@ -40,9 +41,10 @@ pub struct FeedPost {
 }
 
 /// Get personalized feed endpoint
-pub async fn get_feed() -> impl IntoResponse {
+pub async fn get_feed(
+    // State(social_service): State<SocialService>, // We'll implement this later
+) -> impl IntoResponse {
     // TODO: Implement AI-powered feed with personalized recommendations
-
     tracing::info!("Fetching personalized feed");
 
     let posts = vec![

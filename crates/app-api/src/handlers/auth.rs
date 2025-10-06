@@ -1,5 +1,6 @@
-use axum::{http::StatusCode, response::IntoResponse, Json};
+use axum::{http::StatusCode, response::IntoResponse, extract::State, Json};
 use serde::{Deserialize, Serialize};
+use app_auth::AuthService;
 
 #[derive(Debug, Deserialize)]
 pub struct RegisterRequest {
@@ -16,20 +17,25 @@ pub struct RegisterResponse {
 
 /// User registration endpoint
 pub async fn register(
+    State(auth_service): State<AuthService>,
     Json(payload): Json<RegisterRequest>,
 ) -> impl IntoResponse {
-    // TODO: Implement actual registration logic with password hashing
-    // This is a skeleton for now
-
-    tracing::info!("Registration attempt for email: {}", payload.email);
-
-    // Placeholder response
-    let response = RegisterResponse {
-        user_id: uuid::Uuid::new_v4().to_string(),
-        token: "jwt_token_placeholder".to_string(),
-    };
-
-    (StatusCode::CREATED, Json(response))
+    match auth_service.register(payload.email, payload.username, payload.password).await {
+        Ok((user_id, token)) => {
+            let response = RegisterResponse {
+                user_id: user_id.to_string(),
+                token,
+            };
+            (StatusCode::CREATED, Json(response))
+        }
+        Err(e) => {
+            tracing::error!("Registration failed: {}", e);
+            (StatusCode::BAD_REQUEST, Json(serde_json::json!({
+                "error": "Registration failed",
+                "message": e.to_string()
+            })))
+        }
+    }
 }
 
 #[derive(Debug, Deserialize)]
@@ -46,16 +52,23 @@ pub struct LoginResponse {
 
 /// User login endpoint
 pub async fn login(
+    State(auth_service): State<AuthService>,
     Json(payload): Json<LoginRequest>,
 ) -> impl IntoResponse {
-    // TODO: Implement actual login logic with JWT generation
-
-    tracing::info!("Login attempt for email: {}", payload.email);
-
-    let response = LoginResponse {
-        token: "jwt_token_placeholder".to_string(),
-        refresh_token: "refresh_token_placeholder".to_string(),
-    };
-
-    Json(response)
+    match auth_service.login(payload.email, payload.password).await {
+        Ok(token) => {
+            let response = LoginResponse {
+                token,
+                refresh_token: "refresh_token_placeholder".to_string(), // In a real app, generate a refresh token
+            };
+            Json(response)
+        }
+        Err(e) => {
+            tracing::error!("Login failed: {}", e);
+            (StatusCode::UNAUTHORIZED, Json(serde_json::json!({
+                "error": "Invalid credentials",
+                "message": e.to_string()
+            })))
+        }
+    }
 }

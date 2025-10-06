@@ -9,6 +9,8 @@ path = "src/main.rs"
 
 [dependencies]
 app-core = { path = "../app-core" }
+app-storage = { path = "../app-storage" }
+app-auth = { path = "../app-auth" }
 
 tokio = { workspace = true }
 axum = { workspace = true }
@@ -30,3 +32,4 @@ argon2 = { workspace = true }
 
 thiserror = { workspace = true }
 anyhow = { workspace = true }
+sqlx = { workspace = true }

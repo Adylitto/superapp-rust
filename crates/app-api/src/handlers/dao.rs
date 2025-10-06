@@ -1,4 +1,4 @@
-use axum::{http::StatusCode, response::IntoResponse, Json};
+use axum::{http::StatusCode, response::IntoResponse, extract::State, Json};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize)]
@@ -18,10 +18,10 @@ pub struct CreateProposalResponse {
 
 /// Create DAO proposal endpoint
 pub async fn create_proposal(
+    // State(dao_service): State<DaoService>,  // We'll implement this later
     Json(payload): Json<CreateProposalRequest>,
 ) -> impl IntoResponse {
     // TODO: Implement actual proposal creation with blockchain integration
-
     tracing::info!("Creating proposal: {}", payload.title);
 
     let voting_ends_at = chrono::Utc::now()

@@ -1,4 +1,4 @@
-use axum::{http::StatusCode, response::IntoResponse, Json};
+use axum::{http::StatusCode, response::IntoResponse, extract::State, Json};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize)]
@@ -24,10 +24,10 @@ pub struct RequestRideResponse {
 
 /// Request ride endpoint
 pub async fn request_ride(
+    // State(mobility_service): State<MobilityService>,  // We'll implement this later
     Json(payload): Json<RequestRideRequest>,
 ) -> impl IntoResponse {
     // TODO: Implement actual ride matching with AI route optimization
-
     tracing::info!(
         "Ride requested from ({}, {}) to ({}, {})",
         payload.origin.latitude,
