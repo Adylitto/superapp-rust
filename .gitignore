@@ -45,3 +45,4 @@ models/*.pt
 *.key
 *.pem
 secrets/
+.vercel
