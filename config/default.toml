@@ -8,6 +8,8 @@ max_connections = 100
 min_connections = 5
 connection_timeout = 30
 idle_timeout = 600
+# For Supabase, use the connection string from your Supabase dashboard
+# Format: postgresql://[user]:[password]@[host]:[port]/[database]?sslmode=require
 
 [redis]
 pool_size = 10

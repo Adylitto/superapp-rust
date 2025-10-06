@@ -35,3 +35,10 @@ pub enum Error {
     #[error(transparent)]
     Internal(#[from] anyhow::Error),
 }
+
+// Implement From for serde_json::Error
+impl From<serde_json::Error> for Error {
+    fn from(error: serde_json::Error) -> Self {
+        Error::Internal(anyhow::anyhow!("JSON serialization error: {}", error))
+    }
+}

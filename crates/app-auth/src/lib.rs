@@ -4,10 +4,12 @@
 pub mod service;
 pub mod jwt;
 pub mod password;
+pub mod supabase;
 
 pub use service::AuthService;
 pub use jwt::JwtService;
 pub use password::PasswordService;
+pub use supabase::{SupabaseAuthClient, SupabaseConfig, is_supabase_enabled};
 
 /// Auth module errors
 #[derive(Debug, thiserror::Error)]

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# SuperApp Backend Deployment Script for Fly.io
-# This script automates the deployment process
+# Supabase-enabled SuperApp Backend Deployment Script for Fly.io
+# This script automates the deployment process with Supabase integration
 
 set -e
 
@@ -11,7 +11,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-echo -e "${GREEN}🚀 SuperApp Backend Deployment to Fly.io${NC}"
+echo -e "${GREEN}🚀 SuperApp Backend Deployment to Fly.io (with Supabase support)${NC}"
 echo ""
 
 # Add flyctl to PATH
@@ -48,39 +48,36 @@ else
     echo -e "${GREEN}✓ App already exists${NC}"
 fi
 
-# Create PostgreSQL database if not exists
-echo -e "${YELLOW}🗄️  Setting up PostgreSQL database...${NC}"
-if ! flyctl postgres list | grep -q "superapp-db"; then
-    echo "Creating PostgreSQL cluster..."
-    flyctl postgres create \
-        --name superapp-db \
-        --region iad \
-        --initial-cluster-size 1 \
-        --vm-size shared-cpu-1x \
-        --volume-size 1
-
-    echo -e "${GREEN}✓ PostgreSQL created${NC}"
-
-    # Attach database to app
-    echo "Attaching database to app..."
-    flyctl postgres attach superapp-db --app superapp-rust-api
-
-    echo -e "${GREEN}✓ Database attached${NC}"
-else
-    echo -e "${GREEN}✓ PostgreSQL already exists${NC}"
-fi
-
 # Set secrets/environment variables
 echo -e "${YELLOW}🔐 Setting environment secrets...${NC}"
 
-# Generate JWT secret if not provided
-JWT_SECRET=${JWT_SECRET:-$(openssl rand -base64 32)}
-
-flyctl secrets set \
-    JWT_SECRET="$JWT_SECRET" \
-    RUST_LOG="info" \
-    ALLOWED_ORIGINS="https://frontend-1gi1v4oel-adyls-projects-b070f026.vercel.app" \
-    --app superapp-rust-api
+# Check if Supabase variables are provided
+if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ] || [ -z "$SUPABASE_JWT_SECRET" ]; then
+    echo -e "${YELLOW}⚠️  Supabase environment variables not fully set${NC}"
+    echo "Please set SUPABASE_URL, SUPABASE_ANON_KEY, and SUPABASE_JWT_SECRET"
+    echo "Or continue with local database configuration"
+    
+    # Generate JWT secret if not provided
+    JWT_SECRET=${JWT_SECRET:-$(openssl rand -base64 32)}
+    
+    flyctl secrets set \
+        JWT_SECRET="$JWT_SECRET" \
+        RUST_LOG="info" \
+        --app superapp-rust-api
+else
+    # Using Supabase - set both Supabase and application secrets
+    JWT_SECRET=${JWT_SECRET:-$(openssl rand -base64 32)}
+    
+    flyctl secrets set \
+        SUPABASE_URL="$SUPABASE_URL" \
+        SUPABASE_ANON_KEY="$SUPABASE_ANON_KEY" \
+        SUPABASE_SERVICE_ROLE_KEY="$SUPABASE_SERVICE_ROLE_KEY" \
+        SUPABASE_JWT_SECRET="$SUPABASE_JWT_SECRET" \
+        DATABASE_URL="$DATABASE_URL" \
+        JWT_SECRET="$JWT_SECRET" \
+        RUST_LOG="info" \
+        --app superapp-rust-api
+fi
 
 echo -e "${GREEN}✓ Secrets configured${NC}"
 
@@ -100,9 +97,12 @@ echo "Useful commands:"
 echo "  flyctl logs --app superapp-rust-api           # View logs"
 echo "  flyctl status --app superapp-rust-api         # Check status"
 echo "  flyctl ssh console --app superapp-rust-api    # SSH into machine"
-echo "  flyctl postgres connect --app superapp-db     # Connect to database"
 echo ""
-echo -e "${YELLOW}⚠️  Next steps:${NC}"
-echo "1. Run database migrations"
-echo "2. Update frontend NEXT_PUBLIC_API_URL to point to Fly.io URL"
-echo "3. Deploy frontend with new API URL"
+echo -e "${YELLOW}ℹ️  Configuration Notes:${NC}"
+if [ -n "$SUPABASE_URL" ]; then
+    echo "  - Using Supabase database and auth service"
+    echo "  - Make sure your Supabase database has the required schema (run migrations)"
+else
+    echo "  - Using local database configuration"
+    echo "  - Create necessary database and tables in your PostgreSQL instance"
+fi

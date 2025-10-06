@@ -56,6 +56,9 @@ anchor-spl = "0.29"
 tract-onnx = "0.21"
 ndarray = "0.15"
 
+# HTTP Client
+reqwest = { version = "0.11", features = ["json"] }
+
 # Utilities
 uuid = { version = "1.6", features = ["v4", "serde"] }
 chrono = { version = "0.4", features = ["serde"] }

@@ -4,18 +4,18 @@ CREATE TABLE users (
     email VARCHAR(255) UNIQUE NOT NULL,
     username VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
-    profile_full_name VARCHAR(255),
+    profile_full_name VARCHAR(255) NOT NULL DEFAULT '',
     profile_avatar_url TEXT,
     profile_bio TEXT,
     profile_location TEXT,
     profile_phone VARCHAR(50),
-    profile_preferences JSONB DEFAULT '{}',
-    token_balance BIGINT DEFAULT 0,
-    reputation_score DOUBLE PRECISION DEFAULT 0.0,
-    is_verified BOOLEAN DEFAULT FALSE,
-    is_active BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    profile_preferences JSONB NOT NULL DEFAULT '{}',
+    token_balance BIGINT NOT NULL DEFAULT 0,
+    reputation_score DOUBLE PRECISION NOT NULL DEFAULT 0.0,
+    is_verified BOOLEAN NOT NULL DEFAULT FALSE,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
 
 -- Create posts table
@@ -23,16 +23,16 @@ CREATE TABLE posts (
     id UUID PRIMARY KEY,
     author_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     content TEXT NOT NULL,
-    media_urls JSONB DEFAULT '[]',
-    likes_count INTEGER DEFAULT 0,
-    comments_count INTEGER DEFAULT 0,
-    shares_count INTEGER DEFAULT 0,
-    visibility VARCHAR(50) DEFAULT 'Public',
-    is_ai_moderated BOOLEAN DEFAULT FALSE,
-    moderation_score DOUBLE PRECISION DEFAULT 0.0,
-    tokens_earned BIGINT DEFAULT 0,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    media_urls JSONB NOT NULL DEFAULT '[]',
+    likes_count INTEGER NOT NULL DEFAULT 0,
+    comments_count INTEGER NOT NULL DEFAULT 0,
+    shares_count INTEGER NOT NULL DEFAULT 0,
+    visibility VARCHAR(50) NOT NULL DEFAULT 'Public',
+    is_ai_moderated BOOLEAN NOT NULL DEFAULT FALSE,
+    moderation_score DOUBLE PRECISION NOT NULL DEFAULT 0.0,
+    tokens_earned BIGINT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
 
 -- Create messages table
@@ -41,16 +41,16 @@ CREATE TABLE messages (
     from_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     to_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     content TEXT NOT NULL,
-    is_encrypted BOOLEAN DEFAULT FALSE,
-    is_read BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    is_encrypted BOOLEAN NOT NULL DEFAULT FALSE,
+    is_read BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
 
 -- Create rides table
 CREATE TABLE rides (
     id UUID PRIMARY KEY,
     rider_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    driver_id UUID,
+    driver_id UUID REFERENCES users(id) ON DELETE SET NULL,
     origin_latitude DOUBLE PRECISION NOT NULL,
     origin_longitude DOUBLE PRECISION NOT NULL,
     origin_address TEXT,
@@ -61,8 +61,8 @@ CREATE TABLE rides (
     duration INTEGER, -- in seconds
     estimated_cost DECIMAL(10,2),
     actual_cost DECIMAL(10,2),
-    status VARCHAR(50) DEFAULT 'requested',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    status VARCHAR(50) NOT NULL DEFAULT 'requested',
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
     started_at TIMESTAMP WITH TIME ZONE,
     completed_at TIMESTAMP WITH TIME ZONE
 );
@@ -74,9 +74,9 @@ CREATE TABLE proposals (
     title VARCHAR(500) NOT NULL,
     description TEXT,
     proposal_type VARCHAR(100) NOT NULL,
-    status VARCHAR(50) DEFAULT 'Draft',
+    status VARCHAR(50) NOT NULL DEFAULT 'Draft',
     execution_data TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
     voting_starts_at TIMESTAMP WITH TIME ZONE,
     voting_ends_at TIMESTAMP WITH TIME ZONE,
     executed_at TIMESTAMP WITH TIME ZONE
@@ -89,7 +89,7 @@ CREATE TABLE proposal_votes (
     voter_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     vote_type VARCHAR(20) NOT NULL, -- 'For', 'Against', 'Abstain'
     voting_power BIGINT NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
     UNIQUE(proposal_id, voter_id) -- Prevent duplicate votes
 );
 
@@ -102,8 +102,8 @@ CREATE TABLE token_transactions (
     amount BIGINT NOT NULL,
     reason VARCHAR(100) NOT NULL,
     transaction_hash VARCHAR(255),
-    status VARCHAR(50) DEFAULT 'pending',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    status VARCHAR(50) NOT NULL DEFAULT 'pending',
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
 
 -- Create indexes for better performance

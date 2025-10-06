@@ -34,7 +34,7 @@ async fn main() -> anyhow::Result<()> {
 
     // Initialize database connection
     let database_url = std::env::var("DATABASE_URL")
-        .unwrap_or_else(|_| "postgresql://superapp:password@localhost:5432/superapp".to_string());
+        .expect("DATABASE_URL must be set. For Supabase, it should be in format: postgresql://[user]:[password]@[host]:[port]/[database]");
     
     let pool = sqlx::PgPool::connect(&database_url).await
         .expect("Failed to connect to database");

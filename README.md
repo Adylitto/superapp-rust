@@ -51,7 +51,7 @@ Built using Clean Architecture and Domain-Driven Design principles:
 
 ### Required
 - Rust 1.75.0+ (`rustup install stable`)
-- PostgreSQL 15+
+- PostgreSQL 15+ (or Supabase account)
 
 ### Optional but Recommended
 - Redis 7+ (for caching and rate limiting)
@@ -65,24 +65,79 @@ Built using Clean Architecture and Domain-Driven Design principles:
 
 ## 🛠️ Quick Start
 
-**⚡ Fastest way to get started:**
+### Option 1: Using Supabase (Recommended for Easy Setup)
+
+1. **Create Supabase Account**:
+   - Sign up at [https://supabase.com](https://supabase.com)
+   - Create a new project
+   - Get your project connection details
+
+2. **Configure Environment**:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your Supabase details
+   ```
+
+3. **Set Up Database Schema**:
+   - Go to Supabase SQL Editor
+   - Copy contents of `crates/app-storage/migrations/001_initial_schema.sql`
+   - Execute to create tables
+
+4. **Run the Application**:
+   ```bash
+   cargo run -p app-api
+   ```
+
+### Option 2: Local Development with Docker
 
 ```bash
-cd superapp-rust
-
-# Option 1: Use Docker for dependencies (recommended)
+# Use Docker for dependencies (recommended)
 docker-compose -f docker-compose.dev.yml up -d
 cargo run -p app-api
+```
 
-# Option 2: Full Docker
+### Option 3: Full Docker
+```bash
 docker-compose up -d
+```
 
-# Option 3: All local (requires PostgreSQL & Redis)
+### Option 4: All Local (requires PostgreSQL & Redis)
+```bash
 ./scripts/setup.sh
 cargo run -p app-api
 ```
 
 **📖 Detailed guide:** See [docs/QUICK_START.md](./docs/QUICK_START.md)
+**📘 Supabase Integration Guide:** See [docs/SUPABASE_INTEGRATION.md](./docs/SUPABASE_INTEGRATION.md)
+
+## 🔧 Configuration
+
+Edit `config/default.toml`:
+
+```toml
+[server]
+host = "0.0.0.0"
+port = 8080
+
+[database]
+url = "postgresql://user:pass@localhost:5432/superapp"
+max_connections = 100
+
+[redis]
+url = "redis://localhost:6379"
+
+[blockchain]
+network = "devnet"
+program_id = "your-program-id"
+
+[ai]
+model_path = "./models/recommendation.onnx"
+inference_threads = 4
+
+[security]
+jwt_secret = "your-secret-key"
+token_expiry = 3600
+```
 
 ### 2. Database Setup
 

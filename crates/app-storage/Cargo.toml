@@ -3,6 +3,10 @@ name = "app-storage"
 version.workspace = true
 edition.workspace = true
 
+[[bin]]
+name = "test-db"
+path = "src/bin/test_db.rs"
+
 [dependencies]
 app-core = { path = "../app-core" }
 

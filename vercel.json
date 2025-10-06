@@ -9,5 +9,6 @@
   "ignoreCommand": "git diff --quiet HEAD^ HEAD ./frontend",
   "github": {
     "silent": true
-  }
+  },
+  "regions": ["iad1"]
 }

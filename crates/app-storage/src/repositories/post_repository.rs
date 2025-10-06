@@ -2,7 +2,6 @@ use app_core::{Post, PostVisibility};
 use sqlx::{PgPool, FromRow};
 use uuid::Uuid;
 use chrono::{DateTime, Utc};
-use std::collections::HashMap;
 
 #[derive(FromRow, Debug)]
 struct PostDb {
@@ -84,7 +83,7 @@ impl PostRepositoryImpl {
              VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)",
             post.id,
             post.author_id,
-            post.content,
+            &post.content,
             serde_json::to_value(&post.media_urls)?,
             post.likes_count as i32,
             post.comments_count as i32,
@@ -121,7 +120,7 @@ impl PostRepositoryImpl {
                 tokens_earned = $9,
                 updated_at = $10
              WHERE id = $11",
-            post.content,
+            &post.content,
             serde_json::to_value(&post.media_urls)?,
             post.likes_count as i32,
             post.comments_count as i32,
