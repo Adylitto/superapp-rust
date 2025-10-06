@@ -1,18 +1,11 @@
-use crate::{Error, Result, TokenTransaction, TransactionReason, User};
+use crate::{Error, Result, TokenTransaction, TransactionReason};
+use super::user_repository::UserRepository;
 use uuid::Uuid;
 
 /// Use case for granting tokens to users based on various actions
 pub struct GrantTokensUseCase {
     user_repository: Box<dyn UserRepository>,
     transaction_repository: Box<dyn TransactionRepository>,
-}
-
-/// Repository trait for user operations
-#[cfg_attr(test, mockall::automock)]
-#[async_trait::async_trait]
-pub trait UserRepository: Send + Sync {
-    async fn find_by_id(&self, id: Uuid) -> Result<Option<User>>;
-    async fn update(&self, user: &User) -> Result<()>;
 }
 
 /// Repository trait for transaction operations
@@ -105,6 +98,8 @@ impl GrantTokensUseCase {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::user_repository::MockUserRepository;
+    use crate::User;
     use mockall::predicate::*;
 
     #[tokio::test]

@@ -1,4 +1,5 @@
 use crate::{Error, Result, User};
+use super::user_repository::UserRepository;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
@@ -15,14 +16,6 @@ pub trait AIService: Send + Sync {
     async fn recommend_connections(&self, user_id: Uuid, limit: usize) -> Result<Vec<UserRecommendation>>;
     async fn optimize_route(&self, origin: (f64, f64), destination: (f64, f64)) -> Result<RouteOptimization>;
     async fn moderate_content(&self, content: &str) -> Result<ContentModerationResult>;
-}
-
-/// Repository trait for user operations
-#[cfg_attr(test, mockall::automock)]
-#[async_trait::async_trait]
-pub trait UserRepository: Send + Sync {
-    async fn find_by_id(&self, id: Uuid) -> Result<Option<User>>;
-    async fn find_by_ids(&self, ids: Vec<Uuid>) -> Result<Vec<User>>;
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -113,7 +106,8 @@ impl AIRecommendationsUseCase {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use mockall::predicate::*;
+    use crate::user_repository::MockUserRepository;
+    use crate::User;
 
     #[tokio::test]
     async fn test_get_connection_recommendations() {

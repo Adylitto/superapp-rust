@@ -91,7 +91,7 @@ impl User {
 
     /// Update reputation score
     pub fn update_reputation(&mut self, delta: f64) {
-        self.reputation_score = (self.reputation_score + delta).max(0.0).min(100.0);
+        self.reputation_score = (self.reputation_score + delta).clamp(0.0, 100.0);
         self.updated_at = Utc::now();
     }
 

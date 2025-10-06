@@ -1,17 +1,11 @@
-use crate::{Error, Proposal, ProposalType, Result, User};
+use crate::{Error, Proposal, ProposalType, Result};
+use super::user_repository::UserRepository;
 use uuid::Uuid;
 
 /// Use case for creating DAO proposals
 pub struct CreateProposalUseCase {
     user_repository: Box<dyn UserRepository>,
     proposal_repository: Box<dyn ProposalRepository>,
-}
-
-/// Repository trait for user operations
-#[cfg_attr(test, mockall::automock)]
-#[async_trait::async_trait]
-pub trait UserRepository: Send + Sync {
-    async fn find_by_id(&self, id: Uuid) -> Result<Option<User>>;
 }
 
 /// Repository trait for proposal operations
@@ -54,7 +48,7 @@ impl CreateProposalUseCase {
             ));
         }
 
-        if voting_duration_hours < 24 || voting_duration_hours > 168 {
+        if !(24..=168).contains(&voting_duration_hours) {
             return Err(Error::Validation(
                 "Voting duration must be between 24 and 168 hours".to_string(),
             ));
@@ -101,6 +95,8 @@ impl CreateProposalUseCase {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::user_repository::MockUserRepository;
+    use crate::User;
     use mockall::predicate::*;
 
     #[tokio::test]
