@@ -1,0 +1,16 @@
+[package]
+name = "app-storage"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+app-core = { path = "../app-core" }
+
+tokio = { workspace = true }
+sqlx = { workspace = true }
+redis = { workspace = true }
+serde = { workspace = true }
+uuid = { workspace = true }
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+chrono = { workspace = true }

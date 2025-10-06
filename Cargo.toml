@@ -3,7 +3,6 @@ resolver = "2"
 members = [
     "crates/app-core",
     "crates/app-api",
-    "crates/app-dao",
     "crates/app-ai",
     "crates/app-social",
     "crates/app-mobility",
@@ -12,6 +11,8 @@ members = [
     "crates/app-auth",
     "crates/app-storage",
 ]
+
+# Note: app-dao is a separate Anchor workspace at crates/app-dao/
 
 [workspace.package]
 version = "0.1.0"
@@ -60,6 +61,7 @@ uuid = { version = "1.6", features = ["v4", "serde"] }
 chrono = { version = "0.4", features = ["serde"] }
 thiserror = "1.0"
 anyhow = "1.0"
+async-trait = "0.1"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 dotenvy = "0.15"

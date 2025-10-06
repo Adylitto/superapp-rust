@@ -1,0 +1,13 @@
+[package]
+name = "app-payments"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+app-core = { path = "../app-core" }
+
+tokio = { workspace = true }
+serde = { workspace = true }
+uuid = { workspace = true }
+thiserror = { workspace = true }
+anyhow = { workspace = true }

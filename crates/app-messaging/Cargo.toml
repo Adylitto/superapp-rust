@@ -1,0 +1,14 @@
+[package]
+name = "app-messaging"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+app-core = { path = "../app-core" }
+
+tokio = { workspace = true }
+tokio-tungstenite = { workspace = true }
+serde = { workspace = true }
+uuid = { workspace = true }
+thiserror = { workspace = true }
+anyhow = { workspace = true }

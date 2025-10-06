@@ -49,29 +49,40 @@ Built using Clean Architecture and Domain-Driven Design principles:
 
 ## 📋 Prerequisites
 
+### Required
 - Rust 1.75.0+ (`rustup install stable`)
 - PostgreSQL 15+
-- Redis 7+
+
+### Optional but Recommended
+- Redis 7+ (for caching and rate limiting)
+- Docker & Docker Compose (easiest way to run dependencies)
+
+### For Blockchain Features
 - Solana CLI 1.17+ (`sh -c "$(curl -sSfL https://release.solana.com/stable/install)"`)
 - Anchor 0.29+ (`cargo install --git https://github.com/coral-xyz/anchor anchor-cli --locked`)
-- Docker & Kubernetes (for deployment)
+
+**See [docs/INSTALL_DEPENDENCIES.md](./docs/INSTALL_DEPENDENCIES.md) for detailed installation instructions.**
 
 ## 🛠️ Quick Start
 
-### 1. Clone and Setup
+**⚡ Fastest way to get started:**
 
 ```bash
-# Clone repository
-git clone <repo-url>
 cd superapp-rust
 
-# Install Rust dependencies
-cargo build
+# Option 1: Use Docker for dependencies (recommended)
+docker-compose -f docker-compose.dev.yml up -d
+cargo run -p app-api
 
-# Setup environment
-cp .env.example .env
-# Edit .env with your configuration
+# Option 2: Full Docker
+docker-compose up -d
+
+# Option 3: All local (requires PostgreSQL & Redis)
+./scripts/setup.sh
+cargo run -p app-api
 ```
+
+**📖 Detailed guide:** See [docs/QUICK_START.md](./docs/QUICK_START.md)
 
 ### 2. Database Setup
 
