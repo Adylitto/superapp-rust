@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import Link from 'next/link';
 
 export default function SocialPage() {
@@ -107,12 +106,7 @@ export default function SocialPage() {
         {/* Posts Feed */}
         <div className="space-y-6">
           {posts.map((post) => (
-            <motion.div
-              key={post.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-lg shadow"
-            >
+            <div key={post.id} className="bg-white rounded-lg shadow">
               <div className="p-6">
                 <div className="flex items-center mb-4">
                   <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
@@ -139,7 +133,7 @@ export default function SocialPage() {
                   </button>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </main>
